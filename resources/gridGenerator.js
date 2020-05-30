@@ -1,18 +1,26 @@
+//set number to desired grid dimentions, will generate the click and display grids for pente.
+
 var grid = 5;
 
-printGrid(grid);
+printGrids(grid);
 printGridCSS(grid);
 
 
-function printGrid(grid){
+function printGrids(grid){
   let output = '';
+  let clickGrid = grid*grid;
+  let displayGrid = clickGrid - grid;
+  printGrid(clikcGrid);
+  printGrid(diplayGrid);
 
-  output += '<div class="grid-container">\n'
-  for (let i = 1; i <= (grid*grid); i++){
-    output+= `  <div class="grid-item">${i}</div>\n`
+  function printGrid(grid){
+    output += '<div class="grid-container">\n'
+    for (let i = 1; i <= (grid*grid); i++){
+      output+= `  <div class="grid-item">${i}</div>\n`
+    }
+    output += gridContainerClose = '</div>';
+    console.log(output);
   }
-  output += gridContainerClose = '</div>';
-  console.log(output);
 };
 
 

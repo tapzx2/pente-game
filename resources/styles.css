@@ -8,13 +8,67 @@ body{
   color:red;
 }
 
-.grid-container {
+.grid-container.click-grid {
   display: grid;
   grid-template-columns: repeat(3, 50px);
   grid-template-rows: repeat(3, 50px);
 }
 
-.grid-item{
-  background-color: blue;
-  border: 1px solid black;
+.grid-container.click-grid .grid-item {
+  color:rgba(0, 0, 0, 0);
+  background-color: green;
+  margin: 7px;
+  border-radius: 50%;
+  z-index: 9;
 }
+
+.grid-container.display-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 50px);
+  grid-template-rows: repeat(2, 50px);
+
+  position: absolute;
+  top: 25px;
+  left: 25px;
+}
+
+.grid-container.display-grid .grid-item{
+  color:rgba(0, 0, 0, 0);
+  border:1px solid black;
+  background-color: blue;
+}
+
+/*
+
+.grid-container .display-grid{
+  display: grid;
+  grid-template-columns: repeat(2, 50px);
+  grid-template-rows: repeat(2, 50px);
+}
+
+.grid-item{
+  color: rgba(0, 0, 0, 0);
+
+
+}
+
+.click-grid .grid-item{
+  border: 1px solid white;
+  border-radius: 50%;
+  background-color: blue;
+}
+
+
+.display-grid{
+  position: absolute;
+  top: 25px;
+  left: 25px;
+}
+
+.display-grid .grid-item {
+  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid white;
+  background-color: blue;
+}
+
+*/
