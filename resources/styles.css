@@ -16,7 +16,7 @@ body{
 
 .grid-container.click-grid .grid-item {
   color:rgba(0, 0, 0, 0);
-  background-color: green;
+  background-color: rgba(0, 0, 0, 0);
   margin: 7px;
   border-radius: 50%;
   z-index: 9;
@@ -37,6 +37,7 @@ body{
   border:1px solid black;
   background-color: blue;
 }
+
 
 
 
