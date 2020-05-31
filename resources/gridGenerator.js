@@ -20,7 +20,7 @@ function printGrids(grid){
     var counter = 1;
     for (let i = 0; i < grid; i++){
       for (let j = 0; j < grid; j++){
-      output+= `  <div class="grid-item ${i}-${j}">${counter}</div>\n`;
+      output+= `  <div data-coordinates="${i}-${j}" class="grid-item">${counter}</div>\n`;
       counter++;
       }
     }

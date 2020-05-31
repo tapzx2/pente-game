@@ -1,4 +1,12 @@
-//currently working on how to itterate coodinates around target piece
+/*
+//data-playCoordinates has been added
+in css access with:
+.click-grid [data-coordinates="0-0"]{
+  background-color: orange;
+}
+in js script access with:
+var playCoordinates = event.target.dataset.coordinates
+*/
 
 console.log('it works');
 
@@ -10,33 +18,17 @@ var playerColors = ['red', 'green'];
 var playerTurn = player[0];
 var nNeededToWin = 5;
 
-var gridNodeArray = [];
-var pushToGrid = [];
-
-for (let i = 0; i<clickGrid.length; i+=gridSize){
-  pushToGrid = [];
-  console.log(i);
-  for (let j = 0; j<gridSize; j++){
-    var gridAccess = i + j;
-    console.log('accessing node: ' + gridAccess);
-    pushToGrid.push(clickGrid[gridAccess]);
-  }
-  gridNodeArray.push(pushToGrid)
-}
-console.log(gridNodeArray)
-
-
 //add button color, check for win condition
 window.addEventListener('click', function(){
   if (event.target.matches('.click-grid .grid-item')) {
     if (event.target.style.background === '') {
-      console.log(event.target)
-      console.log(event.target.classList[1])
-      checkForWin()
-      event.target.style.background = playerColors[playerTurn];
+      var currentColor = playerColors[playerTurn];
+      event.target.style.background = currentColor;
 
-      //checkGridColors()
+      checkForWin();
 
+
+      //change player turn
       playerTurn === player[0] ? playerTurn = player[1] : playerTurn = player[0];
     }
   }
@@ -44,24 +36,50 @@ window.addEventListener('click', function(){
 
 function checkForWin(){
   //starting point coordinates
-  var playCoordinates = event.target.classList[1];
+  var playCoordinates = event.target.dataset.coordinates
+  console.log('play coordinates: ' + playCoordinates)
+
   //itterate around coordinate
   var x;
   var y;
   var checkGrid = [];
+  //create 9 point grid
   for (let i = -1; i<2; i++){
-    console.log('i :' + i)
+    //console.log('i :' + i)
     x = parseInt(playCoordinates[0]) + i;
     for (let j = -1; j<2; j++){
-      console.log('j :' + j)
+      //console.log('j :' + j)
       y = parseInt(playCoordinates[0]) + j
       checkGrid.push([x,y])
     }
   }
   console.log(checkGrid);
-}
+  //delete index 4 of 9 point gridSize
+  var aroundCenter = checkGrid.filter(function(value, index){
+    return index !== 4
+  });
+  var location = checkGrid[4].join().replace(',','-');
 
-checkForWin()
+  //itterate through check grid
+  for (let i = 0; i<aroundCenter.length; i++){
+    //set location var
+    //set vector var
+    var vector = [[]];
+    vector[0].push(location[0][0]-aroundCenter[i][0]);
+    vector[0].push(location[0][1]-aroundCenter[i][1]);
+    console.log(vector);
+    //get color of corisponding location
+    var locColor = document.querySelector(`.click-grid`).style.backgroundColor;
+    console.log(locColor);
+    //while (location is positive, color of location = color of current player)
+      //in a row ++
+      //if (in a row === 5){alert win}
+      //else
+        //change location var based on vector
+        //get new color at location
+  }
+
+}
 
 
 /*
@@ -126,4 +144,23 @@ function checkGridColors(){
   //start itteration at nodeAcces of winGrid
 
 }
+*/
+
+/*
+//may not need this, creates a sweet array of the playing grid, but because coordinates are already set in the class, it may not be needed!
+
+var gridNodeArray = [];
+var pushToGrid = [];
+
+for (let i = 0; i<clickGrid.length; i+=gridSize){
+  pushToGrid = [];
+  console.log(i);
+  for (let j = 0; j<gridSize; j++){
+    var gridAccess = i + j;
+    console.log('accessing node: ' + gridAccess);
+    pushToGrid.push(clickGrid[gridAccess]);
+  }
+  gridNodeArray.push(pushToGrid)
+}
+console.log(gridNodeArray)
 */
