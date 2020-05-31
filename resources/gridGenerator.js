@@ -11,14 +11,18 @@ function printGrids(grid){
   let clickGrid = grid*grid;
   let displayGrid = clickGrid - grid;
 
-  printGrid(clickGrid);
-  printGrid(displayGrid);
+  printGrid(grid, 'click-grid');
+  printGrid(grid-1, 'display-grid');
 
-  function printGrid(grid){
+  function printGrid(grid, secondClass){
     output = '';
-    output += '<div class="grid-container">\n'
-    for (let i = 1; i <= (grid); i++){
-      output+= `  <div class="grid-item">${i}</div>\n`
+    output += `<div class="grid-container ${secondClass}">\n`
+    var counter = 1;
+    for (let i = 0; i < grid; i++){
+      for (let j = 0; j < grid; j++){
+      output+= `  <div class="grid-item ${i}-${j}">${counter}</div>\n`;
+      counter++;
+      }
     }
     output += gridContainerClose = '</div>';
     console.log(output);
