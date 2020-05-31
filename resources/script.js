@@ -1,4 +1,4 @@
-//WILL RETURN WINNER IF 5 in either column or row, NOT NECESARLLY IN ORDER, FIX THIS
+//currently working on how to itterate coodinates around target piece
 
 console.log('it works');
 
@@ -30,6 +30,9 @@ console.log(gridNodeArray)
 window.addEventListener('click', function(){
   if (event.target.matches('.click-grid .grid-item')) {
     if (event.target.style.background === '') {
+      console.log(event.target)
+      console.log(event.target.classList[1])
+      checkForWin()
       event.target.style.background = playerColors[playerTurn];
 
       //checkGridColors()
@@ -39,6 +42,26 @@ window.addEventListener('click', function(){
   }
 });
 
+function checkForWin(){
+  //starting point coordinates
+  var playCoordinates = event.target.classList[1];
+  //itterate around coordinate
+  var x;
+  var y;
+  var checkGrid = [];
+  for (let i = -1; i<2; i++){
+    console.log('i :' + i)
+    x = parseInt(playCoordinates[0]) + i;
+    for (let j = -1; j<2; j++){
+      console.log('j :' + j)
+      y = parseInt(playCoordinates[0]) + j
+      checkGrid.push([x,y])
+    }
+  }
+  console.log(checkGrid);
+}
+
+checkForWin()
 
 
 /*
