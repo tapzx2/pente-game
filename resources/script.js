@@ -8,7 +8,7 @@ in js script access with:
 var playCoordinates = event.target.dataset.coordinates
 */
 
-console.log('it works');
+//WORKING ON: getting error to stop coming up when playing at the edge.
 
 
 var clickGrid = document.querySelectorAll('.click-grid .grid-item');
@@ -25,7 +25,7 @@ window.addEventListener('click', function(){
       var currentColor = playerColors[playerTurn];
       event.target.style.background = currentColor;
 
-      checkForWin();
+      checkForWin(currentColor);
 
 
       //change player turn
@@ -34,49 +34,82 @@ window.addEventListener('click', function(){
   }
 });
 
-function checkForWin(){
+function checkForWin(currentColor){
+  //count row down, then column in... NOT x, y
+  console.log('row, column');
   //starting point coordinates
   var playCoordinates = event.target.dataset.coordinates
-  console.log('play coordinates: ' + playCoordinates)
+  console.log('play coordinates: ' + playCoordinates);
+
+  //starting point coordinates as array
+  var startLoc = playCoordinates.split('-');
+  console.log('starting location as array: ' + startLoc);
+  console.log('typeof startLoc[0]:' + typeof(startLoc[0]));
 
   //itterate around coordinate
-  var x;
-  var y;
+  var row = 0;
+  var column = 0;
   var checkGrid = [];
   //create 9 point grid
   for (let i = -1; i<2; i++){
-    //console.log('i :' + i)
-    x = parseInt(playCoordinates[0]) + i;
+    row = parseInt(startLoc[0]) + i;
     for (let j = -1; j<2; j++){
       //console.log('j :' + j)
-      y = parseInt(playCoordinates[0]) + j
-      checkGrid.push([x,y])
+      column = parseInt(startLoc[1]) + j
+      checkGrid.push([row,column])
     }
   }
   console.log(checkGrid);
   //delete index 4 of 9 point gridSize
-  var aroundCenter = checkGrid.filter(function(value, index){
+  var checkGrid = checkGrid.filter(function(value, index){
     return index !== 4
   });
-  var location = checkGrid[4].join().replace(',','-');
+  //set location var
+
 
   //itterate through check grid
-  for (let i = 0; i<aroundCenter.length; i++){
-    //set location var
-    //set vector var
-    var vector = [[]];
-    vector[0].push(location[0][0]-aroundCenter[i][0]);
-    vector[0].push(location[0][1]-aroundCenter[i][1]);
-    console.log(vector);
+  for (let i = 0; i<8; i++){
+    var inarow = 1;
+
+
+    var testLoc = [];
+    testLoc.push(checkGrid[i][0], checkGrid[i][1]);
+    console.log('test location: ' + testLoc);
+    var vector = [];
+    vector.push(testLoc[0]-startLoc[0], testLoc[1]-startLoc[1]);
+    console.log('current vector: ' + vector);
+
+    var testLocAsString = `${testLoc[0]}-${testLoc[1]}`
+    var testLocColor = document.querySelector(`.click-grid [data-coordinates="${testLocAsString}"]`).style.backgroundColor;
+    console.log("testLocColor: " + testLocColor);
+    var breakLoop = 0;
+    while(testLoc[0] >= 0 && testLoc[1] >= 0 && testLocColor === currentColor && breakLoop < 10){
+      breakLoop++
+      inarow++
+      console.log('in a row: ' + inarow);
+      if(inarow===5){
+        alert('winner winner chicken dinner');
+      } else {
+        //change location var based on vector
+        testLoc = [testLoc[0] + vector[0], testLoc[1]+vector[1]];
+        console.log('update test loc to: '+ testLoc);
+
+        testLocAsString = `${testLoc[0]}-${testLoc[1]}`
+        testLocColor = document.querySelector(`.click-grid [data-coordinates="${testLocAsString}"]`).style.backgroundColor;
+        console.log('update test loc color to: ' + testLocColor);
+
+        //get new color at location
+      }
+    }
+    //console.log(vector);
     //get color of corisponding location
-    var locColor = document.querySelector(`.click-grid`).style.backgroundColor;
-    console.log(locColor);
+    //
+    //console.log(locColor);
     //while (location is positive, color of location = color of current player)
       //in a row ++
       //if (in a row === 5){alert win}
       //else
-        //change location var based on vector
-        //get new color at location
+
   }
 
 }

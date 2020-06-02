@@ -39,6 +39,9 @@ body{
   background-color: blue;
 }
 
+.click-grid [data-coordinates="0-0"]{
+  background-color: orange;
+}
 
 
 
