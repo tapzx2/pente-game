@@ -80,10 +80,14 @@ function checkForWin(currentColor){
     console.log('current vector: ' + vector);
 
     var testLocAsString = `${testLoc[0]}-${testLoc[1]}`
-    var testLocColor = document.querySelector(`.click-grid [data-coordinates="${testLocAsString}"]`).style.backgroundColor;
-    console.log("testLocColor: " + testLocColor);
+    var testLocColor = getTestLocColor();
+
     var breakLoop = 0;
     while(testLoc[0] >= 0 && testLoc[1] >= 0 && testLocColor === currentColor && breakLoop < 10){
+      //while (location is positive, color of location = color of current player)
+        //in a row ++
+        //if (in a row === 5){alert win}
+        //else
       breakLoop++
       inarow++
       console.log('in a row: ' + inarow);
@@ -93,26 +97,30 @@ function checkForWin(currentColor){
         //change location var based on vector
         testLoc = [testLoc[0] + vector[0], testLoc[1]+vector[1]];
         console.log('update test loc to: '+ testLoc);
-
+        //get new color at location
         testLocAsString = `${testLoc[0]}-${testLoc[1]}`
-        testLocColor = document.querySelector(`.click-grid [data-coordinates="${testLocAsString}"]`).style.backgroundColor;
+        testLocColor = getTestLocColor();
         console.log('update test loc color to: ' + testLocColor);
 
-        //get new color at location
       }
     }
-    //console.log(vector);
-    //get color of corisponding location
-    //
-    //console.log(locColor);
-    //while (location is positive, color of location = color of current player)
-      //in a row ++
-      //if (in a row === 5){alert win}
-      //else
+
+
 
   }
-
+  function getTestLocColor() {
+    //returns color if available, otherwise, returns empty string
+    //exists because selecting style of a non existant element thows an error and breaks the program
+    var output = document.querySelector(`.click-grid [data-coordinates="${testLocAsString}"]`)
+    if (output !== null){
+      return document.querySelector(`.click-grid [data-coordinates="${testLocAsString}"]`).style.backgroundColor;
+    } else {
+      return "";
+    }
+  }
 }
+
+
 
 
 /*
