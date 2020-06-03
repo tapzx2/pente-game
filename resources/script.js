@@ -15,6 +15,9 @@ var clickGrid = document.querySelectorAll('.click-grid .grid-item');
 var gridSize = clickGrid.length**.5;
 var playerColors = ['red', 'green'];
 var currentColor = playerColors[0];
+var captureCount = {};
+captureCount[playerColors[0]] = 0;
+captureCount[playerColors[1]] = 0;
 
 
 //add button color, check for win condition
@@ -38,8 +41,6 @@ function checkFor5Win(currentColor){
 
   //starting point coordinates as array
   var startLoc = event.target.dataset.coordinates.split('-');
-  console.log('\n')
-  console.log('checking for pattern, starting at: ' + startLoc);
 
   //itterate around coordinate create 9 point grid
   var checkGrid = [];
@@ -51,6 +52,9 @@ function checkFor5Win(currentColor){
 
 
   checkforPattern(checkGrid, fiveLongPattern, startLoc);
+  console.log('checked for 5 long pattern');
+  checkforPattern(checkGrid, capturePattern, startLoc);
+  console.log('checked for capture pattern');
 
   //check for 5 in a row
 
@@ -58,6 +62,8 @@ function checkFor5Win(currentColor){
   }
 
 function checkforPattern(checkGrid, pattern, startLoc){
+  console.log('\n')
+  console.log(`checking for ${pattern}, starting at: ` + startLoc);
   //var startLoc = checkGrid.filter(function(coordinate, index){return index === 4;})
   var checkGridwoCenter = checkGrid.filter(function(coordinate, index){return index !== 4;})
   for (let i = 0; i<8; i++){
@@ -73,10 +79,23 @@ function checkforPattern(checkGrid, pattern, startLoc){
         inarow++
         console.log(inarow)
         if (pattern.length === 5 && inarow === 5) {
-          alert('winner winner chicken dinner');
+          alert('winner winner chicken dinner by 5 in a row!');
         } else if (pattern.length === 4 && inarow === 4) {
           alert('capture');
-          //do capture
+          var remove1 = [testLoc[0] - vector[0], testLoc[1] - vector[1]];
+          console.log('remove1 var: ' + remove1)
+          var remove1AsString = `${remove1[0]}-${remove1[1]}`
+          document.querySelector(`.click-grid [data-coordinates="${remove1AsString}"]`).style.backgroundColor = '';
+          var remove2 = [testLoc[0] - vector[0]*2, testLoc[1] - vector[1]*2];
+          console.log('remove2 var: ' + remove2)
+          var remove2AsString = `${remove2[0]}-${remove2[1]}`
+          document.querySelector(`.click-grid [data-coordinates="${remove2AsString}"]`).style.backgroundColor = '';
+          //update capture captureCount
+          captureCount[pattern[0]] += 1;
+          console.log(captureCount);
+          if (captureCount[pattern[0]] === 5){
+            alert('winner winner chicken dinner by capture!');
+          }
         } else {
           console.log('updating to new test loc along vector')
           testLoc = [testLoc[0] + vector[0], testLoc[1] + vector[1]];
