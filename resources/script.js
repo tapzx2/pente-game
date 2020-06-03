@@ -13,12 +13,8 @@ var playCoordinates = event.target.dataset.coordinates
 
 var clickGrid = document.querySelectorAll('.click-grid .grid-item');
 var gridSize = clickGrid.length**.5;
-var player = [0,1];
 var playerColors = ['red', 'green'];
-var playerTurn = player[0];
-var currentColor = playerColors[playerTurn];
-var oppositePlayer = player[1];
-var nNeededToWin = 5;
+var currentColor = playerColors[0];
 
 
 //add button color, check for win condition
@@ -28,45 +24,95 @@ window.addEventListener('click', function(){
       //check for win and capture patterns
       checkFor5Win(currentColor);
       //change player turn
-      playerTurn === player[0] ? playerTurn = player[1] : playerTurn = player[0];
+      currentColor === playerColors[0] ? currentColor = playerColors[1] : currentColor = playerColors[0];
   }
 });
 
 function checkFor5Win(currentColor){
   //count row down, then column in... NOT x, y
   var fiveLongPattern = [currentColor, currentColor, currentColor, currentColor, currentColor];
+
+  var oppositeColor;
+  currentColor === playerColors[0] ? oppositeColor = playerColors[1] : oppositeColor = playerColors[0];
   var capturePattern = [currentColor, oppositeColor, oppositeColor, currentColor];
 
   //starting point coordinates as array
   var startLoc = event.target.dataset.coordinates.split('-');
+  console.log('\n')
+  console.log('checking for pattern, starting at: ' + startLoc);
 
-  //itterate around coordinate create 9 point grid, remove center coordinates
+  //itterate around coordinate create 9 point grid
   var checkGrid = [];
   for (let i = -1; i<2; i++){
     for (let j = -1; j<2; j++){
-      checkGrid.push([parseInt(startLoc[0]) + i, parseInt(startLoc[1]) + j])
+      checkGrid.push([(parseInt(startLoc[0]) + i), (parseInt(startLoc[1]) + j)])
     }
   }
-  checkGrid.splice(4);
 
-  function checkforPattern(checkGrid, pattern){
-      for (let i = 0; i<8; i++){
-        var testLoc = [checkGrid[i][0], checkGrid[i][1]];
-        var vector = [testLoc[0]-startLoc[0], testLoc[1]-startLoc[1]];
-        var testLocAsString = `${testLoc[0]}-${testLoc[1]}`
-        var testLocColor = getTestLocColor(testLocAsString);
-        for (let j = 0; j<pattern.length; j++){
-          if (pattern match){
-            update values
-          } else { break }
-        }
+
+  checkforPattern(checkGrid, fiveLongPattern, startLoc);
+
+  //check for 5 in a row
+
+
   }
+
+function checkforPattern(checkGrid, pattern, startLoc){
+  //var startLoc = checkGrid.filter(function(coordinate, index){return index === 4;})
+  var checkGridwoCenter = checkGrid.filter(function(coordinate, index){return index !== 4;})
+  for (let i = 0; i<8; i++){
+    var testLoc = [checkGridwoCenter[i][0], checkGridwoCenter[i][1]];
+    var vector = [testLoc[0]-parseInt(startLoc[0]), testLoc[1]-parseInt(startLoc[1])];
+    var testLocAsString = `${testLoc[0]}-${testLoc[1]}`
+    var testLocColor = getTestLocColor(testLocAsString);
+    var inarow = 1;
+    for (let j = 1; j<pattern.length; j++){
+      console.log('testining location: ' + testLoc)
+      if (pattern[j] === testLocColor) {
+        console.log('adding to in a row')
+        inarow++
+        console.log(inarow)
+        if (pattern.length === 5 && inarow === 5) {
+          alert('winner winner chicken dinner');
+        } else if (pattern.length === 4 && inarow === 4) {
+          alert('capture');
+          //do capture
+        } else {
+          console.log('updating to new test loc along vector')
+          testLoc = [testLoc[0] + vector[0], testLoc[1] + vector[1]];
+          console.log('test loc along vector is now: ' + testLoc)
+          //get new color at location
+          testLocAsString = `${testLoc[0]}-${testLoc[1]}`
+          testLocColor = getTestLocColor(testLocAsString);
+        }
+      } else { break; }
+    }
+  }
+}
+
+function getTestLocColor(testLocAsString) {
+  //returns color if available, otherwise, returns empty string
+  //exists because selecting style of a non existant element thows an error and breaks the program
+  var output = document.querySelector(`.click-grid [data-coordinates="${testLocAsString}"]`)
+  if (output !== null){
+    return document.querySelector(`.click-grid [data-coordinates="${testLocAsString}"]`).style.backgroundColor;
+  } else {
+    return "";
+  }
+}
 
   //function(pattern)
     //loop through checkGrid
       //define vector
       //while pattern match
         //keep going in that direction
+
+
+
+
+
+/*
+
 
 
   //itterate through check grid
@@ -103,24 +149,7 @@ function checkFor5Win(currentColor){
 
 
 
-  }
 
-  function getTestLocColor(testLocAsString) {
-    //returns color if available, otherwise, returns empty string
-    //exists because selecting style of a non existant element thows an error and breaks the program
-    var output = document.querySelector(`.click-grid [data-coordinates="${testLocAsString}"]`)
-    if (output !== null){
-      return document.querySelector(`.click-grid [data-coordinates="${testLocAsString}"]`).style.backgroundColor;
-    } else {
-      return "";
-    }
-  }
-}
-
-
-
-
-/*
 
 //This is brute force method. Works currently, but if game scales up, could be a disaster!
 
