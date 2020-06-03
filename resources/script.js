@@ -8,7 +8,7 @@ in js script access with:
 var playCoordinates = event.target.dataset.coordinates
 */
 
-//WORKING ON: getting error to stop coming up when playing at the edge.
+//WORKING ON: currently rewriting function checkforPattern(checkGrid, pattern)
 
 
 var clickGrid = document.querySelectorAll('.click-grid .grid-item');
@@ -16,60 +16,61 @@ var gridSize = clickGrid.length**.5;
 var player = [0,1];
 var playerColors = ['red', 'green'];
 var playerTurn = player[0];
+var currentColor = playerColors[playerTurn];
+var oppositePlayer = player[1];
 var nNeededToWin = 5;
+
 
 //add button color, check for win condition
 window.addEventListener('click', function(){
-  if (event.target.matches('.click-grid .grid-item')) {
-    if (event.target.style.background === '') {
-      var currentColor = playerColors[playerTurn];
+  if (event.target.matches('.click-grid .grid-item') && event.target.style.background === '') {
       event.target.style.background = currentColor;
-
-      checkForWin(currentColor);
-
-
+      //check for win and capture patterns
+      checkFor5Win(currentColor);
       //change player turn
       playerTurn === player[0] ? playerTurn = player[1] : playerTurn = player[0];
-    }
   }
 });
 
-function checkForWin(currentColor){
+function checkFor5Win(currentColor){
   //count row down, then column in... NOT x, y
-  console.log('row, column');
-  //starting point coordinates
-  var playCoordinates = event.target.dataset.coordinates
-  console.log('play coordinates: ' + playCoordinates);
+  var fiveLongPattern = [currentColor, currentColor, currentColor, currentColor, currentColor];
+  var capturePattern = [currentColor, oppositeColor, oppositeColor, currentColor];
 
   //starting point coordinates as array
-  var startLoc = playCoordinates.split('-');
-  console.log('starting location as array: ' + startLoc);
-  console.log('typeof startLoc[0]:' + typeof(startLoc[0]));
+  var startLoc = event.target.dataset.coordinates.split('-');
 
-  //itterate around coordinate
-  var row = 0;
-  var column = 0;
+  //itterate around coordinate create 9 point grid, remove center coordinates
   var checkGrid = [];
-  //create 9 point grid
   for (let i = -1; i<2; i++){
-    row = parseInt(startLoc[0]) + i;
     for (let j = -1; j<2; j++){
-      //console.log('j :' + j)
-      column = parseInt(startLoc[1]) + j
-      checkGrid.push([row,column])
+      checkGrid.push([parseInt(startLoc[0]) + i, parseInt(startLoc[1]) + j])
     }
   }
-  console.log(checkGrid);
-  //delete index 4 of 9 point gridSize
-  var checkGrid = checkGrid.filter(function(value, index){
-    return index !== 4
-  });
-  //set location var
+  checkGrid.splice(4);
+
+  function checkforPattern(checkGrid, pattern){
+      for (let i = 0; i<8; i++){
+        var testLoc = [checkGrid[i][0], checkGrid[i][1]];
+        var vector = [testLoc[0]-startLoc[0], testLoc[1]-startLoc[1]];
+        var testLocAsString = `${testLoc[0]}-${testLoc[1]}`
+        var testLocColor = getTestLocColor(testLocAsString);
+        for (let j = 0; j<pattern.length; j++){
+          if (pattern match){
+            update values
+          } else { break }
+        }
+  }
+
+  //function(pattern)
+    //loop through checkGrid
+      //define vector
+      //while pattern match
+        //keep going in that direction
 
 
   //itterate through check grid
   for (let i = 0; i<8; i++){
-    var inarow = 1;
 
 
     var testLoc = [];
@@ -82,12 +83,9 @@ function checkForWin(currentColor){
     var testLocAsString = `${testLoc[0]}-${testLoc[1]}`
     var testLocColor = getTestLocColor();
 
+    var inarow = 1;
     var breakLoop = 0;
     while(testLoc[0] >= 0 && testLoc[1] >= 0 && testLocColor === currentColor && breakLoop < 10){
-      //while (location is positive, color of location = color of current player)
-        //in a row ++
-        //if (in a row === 5){alert win}
-        //else
       breakLoop++
       inarow++
       console.log('in a row: ' + inarow);
@@ -96,19 +94,18 @@ function checkForWin(currentColor){
       } else {
         //change location var based on vector
         testLoc = [testLoc[0] + vector[0], testLoc[1]+vector[1]];
-        console.log('update test loc to: '+ testLoc);
         //get new color at location
         testLocAsString = `${testLoc[0]}-${testLoc[1]}`
         testLocColor = getTestLocColor();
-        console.log('update test loc color to: ' + testLocColor);
-
       }
+
     }
 
 
 
   }
-  function getTestLocColor() {
+
+  function getTestLocColor(testLocAsString) {
     //returns color if available, otherwise, returns empty string
     //exists because selecting style of a non existant element thows an error and breaks the program
     var output = document.querySelector(`.click-grid [data-coordinates="${testLocAsString}"]`)
