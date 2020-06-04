@@ -13,7 +13,7 @@ var playCoordinates = event.target.dataset.coordinates
 
 var clickGrid = document.querySelectorAll('.click-grid .grid-item');
 var gridSize = clickGrid.length**.5;
-var playerColors = ['red', 'green'];
+var playerColors = ['red', '#bdebff'];
 var currentColor = playerColors[0];
 var captureCount = {};
 var playing;
