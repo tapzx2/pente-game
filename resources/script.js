@@ -27,6 +27,7 @@ window.addEventListener('click', function(){
       currentColor === playerColors[0] ? currentColor = playerColors[1] : currentColor = playerColors[0];
   }
 });
+document.querySelector(".play-again").addEventListener('click', init);
 
 function init() {
   //sets playing to true, clears all colors, clears capture count, sets player 0 turn
@@ -38,6 +39,8 @@ function init() {
   captureCount[playerColors[0]] = 0;
   captureCount[playerColors[1]] = 0;
   currentColor = playerColors[0];
+  document.querySelector(".play-again").style.display = "none";
+
 }
 
 function checkForWin(currentColor){
@@ -85,6 +88,7 @@ function checkforPattern(checkGrid, pattern, startLoc){
         if (pattern.length === 5 && inarow === 5) {
           alert('winner winner chicken dinner by 5 in a row!');
           playing = false;
+          document.querySelector(".play-again").style.display = "block";
 
         } else if (pattern.length === 4 && inarow === 4) {
           alert('capture');
@@ -101,7 +105,9 @@ function checkforPattern(checkGrid, pattern, startLoc){
           console.log(captureCount);
           if (captureCount[pattern[0]] === 5){
             alert('winner winner chicken dinner by capture!');
+            document.querySelector(".play-again").style.display = "block";
             playing = false;
+
           }
         } else {
           console.log('updating to new test loc along vector')

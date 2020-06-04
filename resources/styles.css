@@ -43,6 +43,17 @@ body{
   background-color: orange;
 }
 
+.btn {
+  text-align: center;
+  background-color: blue;
+  color: black;
+  font-size: 24px;
+  width:200px;
+  border-radius: 10px;
+}
+
+.play-again {
+}
 
 
 /*
