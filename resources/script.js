@@ -8,12 +8,11 @@ in js script access with:
 var playCoordinates = event.target.dataset.coordinates
 */
 
-//WORKING ON: currently rewriting function checkforPattern(checkGrid, pattern)
 
 
 var clickGrid = document.querySelectorAll('.click-grid .grid-item');
 var gridSize = clickGrid.length**.5;
-var playerColors = ['red', '#bdebff'];
+var playerColors = ['rgb(234, 228, 174)', 'rgb(189, 235, 255)'];
 var currentColor = playerColors[0];
 var captureCount = {};
 var playing;
@@ -22,6 +21,7 @@ init();
 window.addEventListener('click', function(){
   if (event.target.matches('.click-grid .grid-item') && event.target.style.background === '' && playing === true) {
       event.target.style.background = currentColor;
+      console.log(currentColor);
       checkForWin(currentColor);
       //change player turn
       currentColor === playerColors[0] ? currentColor = playerColors[1] : currentColor = playerColors[0];
@@ -81,6 +81,8 @@ function checkforPattern(checkGrid, pattern, startLoc){
     var inarow = 1;
     for (let j = 1; j<pattern.length; j++){
       console.log('testining location: ' + testLoc)
+      console.log(pattern[j]);
+      console.log(testLocColor);
       if (pattern[j] === testLocColor) {
         console.log('adding to in a row')
         inarow++
