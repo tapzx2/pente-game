@@ -16,25 +16,36 @@ var gridSize = clickGrid.length**.5;
 var playerColors = ['red', 'green'];
 var currentColor = playerColors[0];
 var captureCount = {};
-captureCount[playerColors[0]] = 0;
-captureCount[playerColors[1]] = 0;
+var playing;
 
-
-//add button color, check for win condition
+init();
 window.addEventListener('click', function(){
-  if (event.target.matches('.click-grid .grid-item') && event.target.style.background === '') {
+  if (event.target.matches('.click-grid .grid-item') && event.target.style.background === '' && playing === true) {
       event.target.style.background = currentColor;
-      //check for win and capture patterns
-      checkFor5Win(currentColor);
+      checkForWin(currentColor);
       //change player turn
       currentColor === playerColors[0] ? currentColor = playerColors[1] : currentColor = playerColors[0];
   }
 });
 
-function checkFor5Win(currentColor){
-  //count row down, then column in... NOT x, y
-  var fiveLongPattern = [currentColor, currentColor, currentColor, currentColor, currentColor];
+function init() {
+  //sets playing to true, clears all colors, clears capture count, sets player 0 turn
+  playing = true;
+  var playingBoard = document.querySelectorAll('.click-grid .grid-item');
+  for (let i = 0; i<playingBoard.length; i++) {
+    playingBoard[i].style.background = "";
+  }
+  captureCount[playerColors[0]] = 0;
+  captureCount[playerColors[1]] = 0;
+  currentColor = playerColors[0];
+}
 
+function checkForWin(currentColor){
+  //count row down, then column in... NOT x, y
+  //defines 5 in a row pattern and capturePattern
+  //checks for pattern and win states
+
+  var fiveLongPattern = [currentColor, currentColor, currentColor, currentColor, currentColor];
   var oppositeColor;
   currentColor === playerColors[0] ? oppositeColor = playerColors[1] : oppositeColor = playerColors[0];
   var capturePattern = [currentColor, oppositeColor, oppositeColor, currentColor];
@@ -50,16 +61,9 @@ function checkFor5Win(currentColor){
     }
   }
 
-
   checkforPattern(checkGrid, fiveLongPattern, startLoc);
-  console.log('checked for 5 long pattern');
   checkforPattern(checkGrid, capturePattern, startLoc);
-  console.log('checked for capture pattern');
-
-  //check for 5 in a row
-
-
-  }
+}
 
 function checkforPattern(checkGrid, pattern, startLoc){
   console.log('\n')
@@ -80,6 +84,8 @@ function checkforPattern(checkGrid, pattern, startLoc){
         console.log(inarow)
         if (pattern.length === 5 && inarow === 5) {
           alert('winner winner chicken dinner by 5 in a row!');
+          playing = false;
+
         } else if (pattern.length === 4 && inarow === 4) {
           alert('capture');
           var remove1 = [testLoc[0] - vector[0], testLoc[1] - vector[1]];
@@ -95,6 +101,7 @@ function checkforPattern(checkGrid, pattern, startLoc){
           console.log(captureCount);
           if (captureCount[pattern[0]] === 5){
             alert('winner winner chicken dinner by capture!');
+            playing = false;
           }
         } else {
           console.log('updating to new test loc along vector')
@@ -119,6 +126,8 @@ function getTestLocColor(testLocAsString) {
     return "";
   }
 }
+
+
 
   //function(pattern)
     //loop through checkGrid
