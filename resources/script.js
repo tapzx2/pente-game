@@ -19,6 +19,7 @@ var playing;
 
 init();
 window.addEventListener('click', function(){
+  //if the clicked spaces is free, update color, check for capture, and check for win states
   if (event.target.matches('.click-grid .grid-item') && event.target.style.background === '' && playing === true) {
       event.target.style.background = currentColor;
       console.log(currentColor);
@@ -30,9 +31,10 @@ window.addEventListener('click', function(){
 document.querySelector(".play-again").addEventListener('click', init);
 
 function init() {
-  //sets playing to true, clears all colors, clears capture count, sets player 0 turn
+  //sets playing to true, clears all colors, clears capture count, sets player 0 turn, removes play-again button
   playing = true;
   var playingBoard = document.querySelectorAll('.click-grid .grid-item');
+  //clear all colors from playingBoard
   for (let i = 0; i<playingBoard.length; i++) {
     playingBoard[i].style.background = "";
   }
@@ -56,7 +58,7 @@ function checkForWin(currentColor){
   //starting point coordinates as array
   var startLoc = event.target.dataset.coordinates.split('-');
 
-  //itterate around coordinate create 9 point grid
+  //itterate around starting location coordinate, create 9 point grid
   var checkGrid = [];
   for (let i = -1; i<2; i++){
     for (let j = -1; j<2; j++){
@@ -69,10 +71,13 @@ function checkForWin(currentColor){
 }
 
 function checkforPattern(checkGrid, pattern, startLoc){
+  //in the built check grid, checks for supplied pattern, starting at startLoc
+  //two win conditions are coded in for 5 in a row and 5 captures
   console.log('\n')
   console.log(`checking for ${pattern}, starting at: ` + startLoc);
   //var startLoc = checkGrid.filter(function(coordinate, index){return index === 4;})
   var checkGridwoCenter = checkGrid.filter(function(coordinate, index){return index !== 4;})
+  //itterate through check grid
   for (let i = 0; i<8; i++){
     var testLoc = [checkGridwoCenter[i][0], checkGridwoCenter[i][1]];
     var vector = [testLoc[0]-parseInt(startLoc[0]), testLoc[1]-parseInt(startLoc[1])];
@@ -80,18 +85,18 @@ function checkforPattern(checkGrid, pattern, startLoc){
     var testLocColor = getTestLocColor(testLocAsString);
     var inarow = 1;
     for (let j = 1; j<pattern.length; j++){
-      console.log('testining location: ' + testLoc)
-      console.log(pattern[j]);
-      console.log(testLocColor);
+      //console.log('testining location: ' + testLoc) //console.log(pattern[j]); //console.log(testLocColor);
+      //check for pattern itteration to testLocColor match
       if (pattern[j] === testLocColor) {
         console.log('adding to in a row')
         inarow++
         console.log(inarow)
+        //check for 5 in a row win state and end game if true
         if (pattern.length === 5 && inarow === 5) {
           alert('winner winner chicken dinner by 5 in a row!');
           playing = false;
           document.querySelector(".play-again").style.display = "block";
-
+        //check for capture pattern and if true update capture count
         } else if (pattern.length === 4 && inarow === 4) {
           alert('capture');
           var remove1 = [testLoc[0] - vector[0], testLoc[1] - vector[1]];
@@ -105,12 +110,13 @@ function checkforPattern(checkGrid, pattern, startLoc){
           //update capture captureCount
           captureCount[pattern[0]] += 1;
           console.log(captureCount);
+          //check for captureCount winstate
           if (captureCount[pattern[0]] === 5){
             alert('winner winner chicken dinner by capture!');
             document.querySelector(".play-again").style.display = "block";
             playing = false;
-
           }
+          //update test location along vector and get new color at new location
         } else {
           console.log('updating to new test loc along vector')
           testLoc = [testLoc[0] + vector[0], testLoc[1] + vector[1]];
@@ -119,6 +125,7 @@ function checkforPattern(checkGrid, pattern, startLoc){
           testLocAsString = `${testLoc[0]}-${testLoc[1]}`
           testLocColor = getTestLocColor(testLocAsString);
         }
+        //if no color match, stop the itteration
       } else { break; }
     }
   }
@@ -134,136 +141,3 @@ function getTestLocColor(testLocAsString) {
     return "";
   }
 }
-
-
-
-  //function(pattern)
-    //loop through checkGrid
-      //define vector
-      //while pattern match
-        //keep going in that direction
-
-
-
-
-
-/*
-
-
-
-  //itterate through check grid
-  for (let i = 0; i<8; i++){
-
-
-    var testLoc = [];
-    testLoc.push(checkGrid[i][0], checkGrid[i][1]);
-    console.log('test location: ' + testLoc);
-    var vector = [];
-    vector.push(testLoc[0]-startLoc[0], testLoc[1]-startLoc[1]);
-    console.log('current vector: ' + vector);
-
-    var testLocAsString = `${testLoc[0]}-${testLoc[1]}`
-    var testLocColor = getTestLocColor();
-
-    var inarow = 1;
-    var breakLoop = 0;
-    while(testLoc[0] >= 0 && testLoc[1] >= 0 && testLocColor === currentColor && breakLoop < 10){
-      breakLoop++
-      inarow++
-      console.log('in a row: ' + inarow);
-      if(inarow===5){
-        alert('winner winner chicken dinner');
-      } else {
-        //change location var based on vector
-        testLoc = [testLoc[0] + vector[0], testLoc[1]+vector[1]];
-        //get new color at location
-        testLocAsString = `${testLoc[0]}-${testLoc[1]}`
-        testLocColor = getTestLocColor();
-      }
-
-    }
-
-
-
-
-
-//This is brute force method. Works currently, but if game scales up, could be a disaster!
-
-
-function checkGridColors(){
-  //horizontal check
-  var clickGrid = document.querySelectorAll('.click-grid .grid-item');
-  console.log(clickGrid);
-
-  var nodeAccess
-
-  for (var i = 0; i<clickGrid.length; i+=gridSize){
-    //console.log('starting with row: ' + i);
-    var totalInRow = 0;
-    //console.log('current total in row : ' + totalInRow);
-    for (var j = 0; j<gridSize; j++){
-      nodeAccess = i + j;
-      //console.log('accessing node: ' + nodeAccess);
-      if (clickGrid[nodeAccess].style.background === playerColors[playerTurn]) {
-        totalInRow++;
-        //console.log('total in row now: ' + totalInRow);
-        if (totalInRow === nNeededToWin) {
-          //console.log('winner!!!');
-          alert('winner')
-        }
-      } else {
-        totalInRow = 0;
-      }
-    }
-  }
-
-  //vertical check
-  for (var k = 0; k<clickGrid.length/gridSize; k++){
-    //console.log('starting with column: ' + k);
-    var totalInColumn = 0;
-    //console.log('current total in column: ' + totalInColumn);
-    for (let l = 0; l<clickGrid.length; l+=gridSize){
-      nodeAccess = l + k;
-      //console.log('accessing node: ' + nodeAccess);
-      if (clickGrid[nodeAccess].style.background === playerColors[playerTurn]) {
-        totalInColumn++;
-        //console.log('total in column now: ' + totalInColumn);
-        if (totalInColumn === nNeededToWin) {
-          //console.log('winner!!!');
-          alert('winner');
-        }
-      } else {
-        totalInColumn = 0;
-      }
-
-    }
-  }
-  //diagonal top right to bottom left check
-
-  //establish win grid length
-  var winGrid = gridSize - (nNeededToWin - 1);
-  var accessNode = gridSize - winGrid;
-  console.log(accessNode);
-  //start itteration at nodeAcces of winGrid
-
-}
-*/
-
-/*
-//may not need this, creates a sweet array of the playing grid, but because coordinates are already set in the class, it may not be needed!
-
-var gridNodeArray = [];
-var pushToGrid = [];
-
-for (let i = 0; i<clickGrid.length; i+=gridSize){
-  pushToGrid = [];
-  console.log(i);
-  for (let j = 0; j<gridSize; j++){
-    var gridAccess = i + j;
-    console.log('accessing node: ' + gridAccess);
-    pushToGrid.push(clickGrid[gridAccess]);
-  }
-  gridNodeArray.push(pushToGrid)
-}
-console.log(gridNodeArray)
-*/
