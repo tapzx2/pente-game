@@ -1,17 +1,56 @@
-/*
-//data-playCoordinates has been added
-in css access with:
-.click-grid [data-coordinates="0-0"]{
-  background-color: orange;
+/*create model*/
+
+//MODEL
+//cordinates go row, column
+
+var board = 
+[
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+];
+
+const players = [1, 2]
+var currentPlayer = players[0];
+
+//VIEW
+//on click pass click coordinate location to JS
+function testClick(coordinate) {
+  return coordinate
 }
-in js script access with:
-var playCoordinates = event.target.dataset.coordinates
-*/
 
-/* had a great convo with fernando about MCV. Now, I'm testing VS Code and git hub integration */
+//CONTROLLER
 
-var hellGit = "are you working?"
+function onClick(click){
+  if (board[click[0]][click[1]] === 0) { //if location is empty
+    board[click[0]][click[1]] = currentPlayer; //update board
+    currentPlayer === players[0] ? currentPlayer = players[1] : currentPlayer = players[0]; //update current player
+    console.log(board);
+    console.log('player turn: ' + currentPlayer);
+  } else {
+    //do nothing
+  }
+}
 
+//GAME TEST
+var clickOne = testClick([1,1]);
+console.log("click location row / column: " + clickOne);
+onClick(clickOne)
+
+var clickTwo = testClick([2,1]);
+console.log("click location row / column: " + clickTwo);
+onClick(clickTwo)
+
+
+
+/*
 
 var clickGrid = document.querySelectorAll('.click-grid .grid-item');
 var gridSize = clickGrid.length**.5;
@@ -144,3 +183,4 @@ function getTestLocColor(testLocAsString) {
     return "";
   }
 }
+*/
