@@ -8,6 +8,9 @@ in js script access with:
 var playCoordinates = event.target.dataset.coordinates
 */
 
+/* had a great convo with fernando about MCV. Now, I'm testing VS Code and git hub integration */
+
+var hellGit = "are you working?"
 
 
 var clickGrid = document.querySelectorAll('.click-grid .grid-item');
