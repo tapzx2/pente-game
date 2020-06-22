@@ -1,4 +1,5 @@
-/*add check diagonals*/
+/*debug capture check*/
+/*5 in a row tests break if checking at edge of the board */
 
 //MODEL
 //cordinates go row, column
@@ -6,7 +7,10 @@ const players = [1, 2];
 
 var grid;
 var playerTurn;
+var oppositePlayerTurn;
 var record;
+var captures;
+var capturePattern;
 
 function init () {
   grid = 
@@ -22,8 +26,13 @@ function init () {
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
   ];
+
   playerTurn = players[0];
+  oppositePlayerTurn = players[1];
+  captures = [];
   record = [];
+  capturePattern = [playerTurn, oppositePlayerTurn, oppositePlayerTurn, oppositePlayerTurn];
+
 };
 
 //VIEW
@@ -44,9 +53,57 @@ function onClick(click){
     updateBoard(click);
     //showGrid();
     checkfor5win(click);
+    checkforCapture(click)
+    //add check for capture
+    //add check for capture win
+    //showGrid();
     updatePlayerTurn();
   }
 }
+
+// check for capture
+function checkforCapture(click){
+  console.log('checking for capture...');
+  for (let i = -1; i<2; i++){
+    for (let j = -1; j<2; j++){
+      //console.log(`in row direction: ${i} and col direction: ${j}`)
+      if (checkCaptureDirection(click, i, j)) {
+        //removePieces(click, i, j)
+        console.log('******capture!******\n\n\n')
+      }
+    }
+  }
+}
+
+////check Capture Direction
+function checkCaptureDirection(click, rowVec, colVec){
+  for (let i = 0; i<capturePattern.length; i++){
+    //console.log(`click[0]: ${click[0]}, click[1]: ${click[0]}`);
+    //console.log('rowVec * i: ' + (rowVec * i))
+    //console.log('colVec * i: ' + (colVec * i))
+    //console.log('[click[0] + (rowVec * i)][click[1] + (colVec * i)]: ' + [click[0] + (rowVec * i)] + ',' + [click[1] + (colVec * i)]);
+    if (
+      click[0] + (rowVec * i) < 0 ||
+      click[1] + (colVec * i) < 0
+    ) {
+      //console.log('does not exist on grid, returning false, ending this direction\n')
+      return false
+    } else if (grid[click[0] + (rowVec * i)][click[1] + (colVec * i)] !== capturePattern[i]) {
+      //console.log(`grid value at above loc: ${grid[click[0] + (rowVec * i)][click[1] + (colVec * i)]}`)
+      //console.log(`capture pattern to match: ${capturePattern[i]}`)
+      //console.log('location value does not match capture pattern, returning false, ending this direction\n')
+      return false;
+    } else if (i === 3){
+      //console.log(`grid value at above loc: ${grid[click[0] + (rowVec * i)][click[1] + (colVec * i)]}`)
+      //console.log(`capture pattern to match: ${capturePattern[i]}`)
+      //console.log(`made it to the end of capture pattern i === ${i} returning true \n`)
+      return true
+    }
+  }
+}
+
+
+////// remove Pieces
 
 //check for 5 in a row
 function checkfor5win(click) {
@@ -179,6 +236,8 @@ function checkDown(click){
 
 function updatePlayerTurn(){
   playerTurn === players[0] ? playerTurn = players[1] : playerTurn = players[0];
+  oppositePlayerTurn = players[1];
+  capturePattern = [playerTurn, oppositePlayerTurn, oppositePlayerTurn, oppositePlayerTurn];
 }
 
 function updateBoard(click){
@@ -190,6 +249,26 @@ function makeRecord(click) {
 }
 
 //GAME TEST
+
+//make capture test vertical, horizontal, both diagonals
+
+//vertical capture test
+init();
+var gameClicks = [
+  [2,2], [1,2],
+  [3,2], [4,2]
+];
+console.log('vertical capture test')
+for (let i = 0; i<gameClicks.length;i++){
+  console.log('clicking: ' + gameClicks[i]);
+  onClick(gameClicks[i])
+}
+/*
+
+
+  [2,2], [1,2],
+  [3,2], [4,2]
+
 
 //diagonal win game test upRight downLeft
 init();
