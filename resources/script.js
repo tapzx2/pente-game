@@ -1,55 +1,355 @@
-/*create model*/
+/*add check diagonals*/
 
 //MODEL
 //cordinates go row, column
+const players = [1, 2];
 
-var board = 
-[
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-];
+var grid;
+var playerTurn;
+var record;
 
-const players = [1, 2]
-var currentPlayer = players[0];
+function init () {
+  grid = 
+  [
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+  ];
+  playerTurn = players[0];
+  record = [];
+};
 
 //VIEW
 //on click pass click coordinate location to JS
-function testClick(coordinate) {
-  return coordinate
+function showGrid() {
+  console.log(grid);
+} 
+
+function showPlayerTurn(){
+  console.log(playerTurn);
 }
 
-//CONTROLLER
+//CONTROLER v2
 
 function onClick(click){
-  if (board[click[0]][click[1]] === 0) { //if location is empty
-    board[click[0]][click[1]] = currentPlayer; //update board
-    currentPlayer === players[0] ? currentPlayer = players[1] : currentPlayer = players[0]; //update current player
-    console.log(board);
-    console.log('player turn: ' + currentPlayer);
-  } else {
-    //do nothing
+  if(grid[click[0]][click[1]] === 0){
+    makeRecord(click)
+    updateBoard(click);
+    //showGrid();
+    checkfor5win(click);
+    updatePlayerTurn();
   }
 }
 
+//check for 5 in a row
+function checkfor5win(click) {
+  if (
+    checkVertical(click) || 
+    checkHorizontal(click) ||
+    checkDiagULDR(click) ||
+    checkDiagURDL(click)) {
+    console.log('win!')
+  }
+}
+
+////check for diagURDL up left down right
+function checkDiagURDL(click) {
+  return (1 + checkUpRight(click) + checkDownLeft(click) >= 5)
+}
+
+//////checkUpRight
+function checkUpRight(click){
+  var matchingUpRight = 0;
+  var rowDirection = -1;
+  var colDirection = 1
+  while(grid[click[0] + rowDirection][click[1] + colDirection] === playerTurn) {
+    matchingUpRight += 1;
+    rowDirection -= 1;
+    colDirection += 1
+  }
+  return matchingUpRight
+}
+
+//////checkDownLeft
+function checkDownLeft(click){
+  var matchingDownLeft = 0;
+  var rowDirection = 1;
+  var colDirection = -1
+  while(grid[click[0] + rowDirection][click[1] + colDirection] === playerTurn) {
+    matchingDownLeft += 1;
+    rowDirection += 1;
+    colDirection -= 1
+  }
+  return matchingDownLeft
+}
+
+////check for diagULDR up left down right
+function checkDiagULDR(click) {
+  return (1 + checkUpLeft(click) + checkDownRight(click) >= 5)
+}
+
+//////checkUpLeft
+function checkUpLeft(click){
+  var matchingUpLeft = 0;
+  var rowDirection = -1;
+  var colDirection = -1
+  while(grid[click[0] + rowDirection][click[1] + colDirection] === playerTurn) {
+    matchingUpLeft += 1;
+    rowDirection -= 1;
+    colDirection -= 1
+  }
+  return matchingUpLeft
+}
+
+//////checkDownRight
+function checkDownRight(click){
+  var matchingDownRight = 0;
+  var rowDirection = 1;
+  var colDirection = 1
+  while(grid[click[0] + rowDirection][click[1] + colDirection] === playerTurn) {
+    matchingDownRight += 1;
+    rowDirection += 1;
+    colDirection += 1
+  }
+  return matchingDownRight
+}
+
+////check for Horizontal Total
+function checkHorizontal(click) {
+  return (1 + checkLeft(click) + checkRight(click) >= 5)
+}
+
+//////checkLeft
+function checkLeft(click){
+  var matchingLeft = 0;
+  var direction = -1;
+  while(grid[click[0]][click[1] + direction] === playerTurn){
+    matchingLeft += 1;
+    direction -= 1;
+  }
+  return matchingLeft
+}
+
+//////checkRight
+function checkRight(click){
+  var matchingRight = 0;
+  var direction = 1;
+  while(grid[click[0]][click[1] + direction] === playerTurn){
+    matchingRight += 1;
+    direction += 1;
+  }
+  return matchingRight
+}
+
+////check for Vertical Total
+function checkVertical(click) {
+  return (1 + checkUp(click) + checkDown(click) >= 5)
+}
+
+//////checkUp
+function checkUp(click){
+  var matchingUp = 0;
+  var direction = -1;
+  while(grid[click[0] + direction][click[1]] === playerTurn){
+    matchingUp += 1;
+    direction -= 1;
+  }
+  return matchingUp
+}
+
+//////checkDown
+function checkDown(click){
+  var matchingDown = 0;
+  var direction = 1;
+  while(grid[click[0] + direction][click[1]] === playerTurn){
+    matchingDown += 1;
+    direction += 1;
+  }
+  return matchingDown
+}
+
+//update model functions
+
+function updatePlayerTurn(){
+  playerTurn === players[0] ? playerTurn = players[1] : playerTurn = players[0];
+}
+
+function updateBoard(click){
+  grid[click[0]][click[1]] = playerTurn;
+}
+
+function makeRecord(click) {
+  record.push(click);
+}
+
 //GAME TEST
-var clickOne = testClick([1,1]);
-console.log("click location row / column: " + clickOne);
-onClick(clickOne)
 
-var clickTwo = testClick([2,1]);
-console.log("click location row / column: " + clickTwo);
-onClick(clickTwo)
+//diagonal win game test upRight downLeft
+init();
+var gameClicks = [
+  [1,5], [1,6],
+  [2,4], [2,5],
+  [3,3], [3,4],
+  [4,2], [4,3],
+  [5,1]
+];
+console.log('diagonal game test up right down left')
+for (let i = 0; i<gameClicks.length;i++){
+  onClick(gameClicks[i])
+}
+
+//diagonal win game test Upleft Downrigth
+init();
+var gameClicks = [
+  [1,1], [1,2],
+  [2,2], [2,3],
+  [5,5], [3,4],
+  [4,4], [4,5],
+  [3,3]
+];
+console.log('diagonal game test up left down right')
+for (let i = 0; i<gameClicks.length;i++){
+  onClick(gameClicks[i])
+}
+
+//horizontal win game test
+init();
+var gameClicks = [
+  [1,1], [2,1],
+  [1,2], [2,2],
+  [1,5], [2,3],
+  [1,4], [2,4],
+  [1,3]
+];
+console.log('horizontal game test')
+for (let i = 0; i<gameClicks.length;i++){
+  onClick(gameClicks[i])
+}
+
+//vertical win test
+init();
+var gameClicks = [
+  [1,1], [1,2],
+  [2,1], [2,2],
+  [5,1], [3,2],
+  [4,1], [4,2],
+  [3,1]
+];
+console.log('vertical game test')
+for (let i = 0; i<gameClicks.length;i++){
+  onClick(gameClicks[i])
+}
 
 
 
+/*
+//CONTROLLER
+
+function onClick(click, board, currentPlayer){
+  console.log('player turn: ' + currentPlayer)
+  console.log('click location: ' + click);
+  if (checkifEmpty(click, board)) {
+    console.log('location empty: true')
+    console.log('updating value...new board:')
+    updateValue(click, board, currentPlayer);
+    console.log(board);
+    //update view
+    console.log('checking for win...')
+    checkfor5win(click, board, currentPlayer);
+    console.log('check completed');
+    // check for capture
+        // If capture remove 2 middle pieces from model
+        // Send change to view
+    // check for capture win
+      // if true
+        // apply end of game view state
+        // stop taking inputs
+    
+    console.log('updating currentPlayer...')
+    currentPlayer === players[0] ? currentPlayer = players[1] : currentPlayer = players[0];
+    console.log(currentPlayer)
+  }
+}
+
+function checkfor5win(click, board, currentPlayer) {
+  if (
+    checkVertical(click, board, currentPlayer) //||
+    //checkHorizontal(click, board, currentPlayer) ||
+    //checkDiagLR(click, board, currentPlayer) ||
+    //checkDiagRL(click, board, currentPlayer)
+  ) { console.log('in a row win vertical')
+      // apply end of game view state
+      // stop taking inputs
+  }
+}
+  
+function checkVertical(click, board, currentPlayer) {
+  return 1 + checkUp(click, board, currentPlayer) + checkDown(click, board, currentPlayer) >= 5;
+}
+  
+function checkUp(click, board, currentPlayer){
+  var matchingUp = 0;
+  var direction = -1;
+  while(board[click[0] + direction][click[1]] === currentPlayer){
+    matchingUp += 1;
+    direction += direction;
+  }
+  return matchingUp
+}
+
+function checkDown(click, board, currentPlayer){
+  var matchingDown = 0;
+  var direction = 1;
+  while(board[click[0] + direction][click[1]] === currentPlayer){
+    matchingDown += 1;
+    direction += direction;
+  }
+  return matchingDown
+}
+
+function checkifEmpty(click, board){
+  if (board[click[0]][click[1]] === 0){
+    return true
+  } else {
+    return false
+  }
+}
+
+function updateValue(click, board, currentPlayer) {
+  board[click[0]][click[1]] = currentPlayer;
+}
+  
+
+
+//GAME TEST
+
+var gameClicks = [
+  [1,1], [1,2],
+  [2,1], [2,2],
+  [3,1], [3,2],
+  [4,1], [4,2],
+  [5,2], [5,2]
+]
+
+function vertWinTest(gameClicks, board, currentPlayer, players){
+  
+  for (let i = 0; i<gameClicks.length;i++){
+    onClick(gameClicks[i], board, currentPlayer, players)
+  }
+}
+
+
+
+//vertWinTest(gameClicks, theBoard, ourCurrentPlayer, players)
+
+*/
 /*
 
 var clickGrid = document.querySelectorAll('.click-grid .grid-item');
