@@ -1,0 +1,154 @@
+*{
+  padding:0;
+  margin:0;
+  box-sizing: border-box;
+}
+
+body, html {
+  font-family: 'Roboto', sans-serif;
+  font-size:14px;
+  font-weight:300;
+  height: 100%;
+  display: grid;
+}
+
+.start-screen{
+  display:inline-block;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+}
+
+.color-selector, h2, .menu-selector{
+  margin:0;
+  text-align:center;
+}
+
+.color-selector{
+  display:flex;
+  justify-content:flex-end;
+  margin-bottom:-0px;
+}
+
+a.bw{
+  padding-left:7px;
+  color:black;
+}
+
+.divider{
+  font-size:80%;
+  font-weight:300;
+}
+
+a.color{
+  padding-right:7px;
+  /* standard gradient background */
+  background: linear-gradient(0.25turn, #6f7496, #8b676b);
+
+  /* clip hackery */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h2, .menu-selector{
+    background-color:#caaf95;
+    border-left: 1px solid #6f7496;
+    border-right: 1px solid #6f7496;
+}
+
+h2 {
+  font-size: 800%;
+  font-weight:300;
+  text-transform: uppercase;
+  padding:15px 50px 0 50px;
+  border-top: 1px solid #6f7496;
+  color: #5c607c;
+}
+
+.menu-selector{
+  display:flex;
+  justify-content:space-around;
+  padding:0 0 10px 0;
+  border-bottom: 1px solid #6f7496;
+}
+
+.rules, .play{
+  font-family: 'Sacramento', cursive;
+  font-size:150%;
+}
+
+.rules{
+  color:rgb(234, 228, 174);
+}
+
+.play{
+  color: #d2f1ff;
+}
+
+a {
+  text-decoration:none;
+}
+
+
+
+div.game-frame{
+  text-align: center;
+  background-image: url(images/background.png);
+  background-position: center;
+  background-size: contain;
+  width:900px;
+  height: 900px;
+  margin: auto;
+  display:none;
+}
+
+.grid-container.click-grid {
+  display: grid;
+  margin: 0 auto;
+  grid-template-columns: repeat(10, 50px);
+  grid-template-rows: repeat(10, 50px);
+  position: relative;
+  left: 200px;
+  top: 210px;
+}
+
+.grid-container.click-grid .grid-item {
+  /*color:rgba(0, 0, 0, 0);*/
+  background-color: rgba(0, 0, 0, 0);
+  margin: 7px;
+  border-radius: 50%;
+  z-index: 9;
+}
+
+.grid-container.display-grid{
+  display: grid;
+  margin: 0 auto;
+  grid-template-columns: repeat(9, 50px);
+  grid-template-rows: repeat(9, 50px);
+  position: relative;
+  left: 225px;
+  top: -265px;
+}
+
+.grid-container.display-grid .grid-item{
+  color: rgba(0, 0, 0, 0);
+  border: .5px solid rgba(0, 0, 0, .1);
+  background-color:rgba(0, 0, 0, 0);
+}
+
+.click-grid [data-coordinates="0-0"]{
+  background-color: orange;
+}
+
+.btn {
+  text-align: center;
+  color: rgb(139, 103, 107);
+  background-color: rgb(202, 175, 149);
+  font-size: 24px;
+  width:200px;
+  border-radius: 10px;
+  margin: 0 auto;
+}
+
+.play-again {
+}

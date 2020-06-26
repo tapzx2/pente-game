@@ -11,6 +11,7 @@ var oppositePlayerTurn;
 var record;
 var captures;
 var capturePattern;
+var playingGame;
 
 function init () {
   grid = 
@@ -29,14 +30,20 @@ function init () {
 
   playerTurn = players[0];
   oppositePlayerTurn = players[1];
-  captures = [];
   record = [];
+  captures = [0, 0];
   capturePattern = [playerTurn, oppositePlayerTurn, oppositePlayerTurn, playerTurn];
-
+  playingGame = true;
 };
 
 //VIEW
 //on click pass click coordinate location to JS
+
+document.querySelector('.play').addEventListener('click', function(){
+  document.querySelector('.start-screen').style.display = 'none';
+  document.querySelector('.game-frame').style.display = 'block';
+})
+
 function showGrid() {
   console.log(grid);
 } 
@@ -45,10 +52,30 @@ function showPlayerTurn(){
   console.log(playerTurn);
 }
 
-//CONTROLER v2
+//CONTROLER
+
+init();
+window.addEventListener('click', function(){
+  if (event.target.matches('.click-grid .grid-item')) {
+    console.log(formatClick(event.target.dataset.coordinates))
+    var playerClick = formatClick(event.target.dataset.coordinates)
+    onClick(playerClick);
+  }
+})
+
+function formatClick(input){
+  var output = [];
+  var asArray = input.split('-');
+  for (let i = 0; i<asArray.length;i++){
+    output.push(Number.parseInt(asArray[i]));
+  }
+  return output
+}
+
+//I think this is all model stuff
 
 function onClick(click){
-  if(grid[click[0]][click[1]] === 0){
+  if(playingGame && grid[click[0]][click[1]] === 0){
     console.log('turn: ' + (record.length + 1));
     //console.log(capturePattern);
     makeRecord(click)
@@ -64,11 +91,13 @@ function onClick(click){
 }
 
 //check for capture win
-function checkforCaptureWin(); {
+function checkforCaptureWin() {
   if (captures[0] >= 5) {
     console.log(`player ${players[0]} wins!`)
+    playingGame = false;
   } else if (captures[1] >= 5) {
     console.log(`player ${players[1]} wins!`)
+    playingGame = false;
   }
 }
 
@@ -84,6 +113,8 @@ function checkforCapture(click){
         console.log('******capture!******\n\n\n')
         grid[click[0]+i][click[1]+j] = 0;
         grid[click[0]+i+i][click[1]+j+j] = 0;
+        captures[playerTurn-1] += 1;
+        console.log(captures);
         //showGrid();
       }
     }
@@ -120,7 +151,6 @@ function checkCaptureDirection(click, rowVec, colVec){
   }
 }
 
-
 ////// remove Pieces
 
 //check for 5 in a row
@@ -131,6 +161,7 @@ function checkfor5win(click) {
     checkDiagULDR(click) ||
     checkDiagURDL(click)) {
     console.log('win!')
+    playingGame = false;
   }
 }
 
@@ -294,11 +325,25 @@ function makeRecord(click) {
   record.push(click);
 }
 
-//GAME TEST
+/*
+//GAME TESTs
 
-//make capture test vertical, horizontal, both diagonals
+//end game functionality test
+init();
+var gameClicks = [
+  [1,1], [1,2],
+  [2,1], [2,2],
+  [5,1], [3,2],
+  [4,1], [4,2],
+  [3,1], [6,6]
+];
+console.log('end game on 5 in a row win functionality test')
+console.log('should not have turn 10')
+for (let i = 0; i<gameClicks.length;i++){
+  onClick(gameClicks[i])
+}
 
-//vertical capture test
+//capture tests
 
 var verticalCapture = [
   [2,2], [1,2],
@@ -360,7 +405,7 @@ for (let i = 0; i<gameClicks.length;i++){
   console.log('clicking: ' + gameClicks[i]);
   onClick(gameClicks[i])
 }
-*/
+
 
 //diagonal win game test upRight downLeft
 init();
@@ -419,6 +464,8 @@ for (let i = 0; i<gameClicks.length;i++){
 }
 
 
+
+*/
 
 /*
 //CONTROLLER
@@ -521,6 +568,7 @@ function vertWinTest(gameClicks, board, currentPlayer, players){
 //vertWinTest(gameClicks, theBoard, ourCurrentPlayer, players)
 
 */
+
 /*
 
 var clickGrid = document.querySelectorAll('.click-grid .grid-item');
