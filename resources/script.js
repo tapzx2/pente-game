@@ -55,10 +55,20 @@ function onClick(click){
     updateBoard(click);
     //showGrid();
     checkfor5win(click);
-    checkforCapture(click)
+    checkforCapture(click);
+    checkforCaptureWin();
     //add check for capture win
     //showGrid();
     updatePlayerTurn();
+  }
+}
+
+//check for capture win
+function checkforCaptureWin(); {
+  if (captures[0] >= 5) {
+    console.log(`player ${players[0]} wins!`)
+  } else if (captures[1] >= 5) {
+    console.log(`player ${players[1]} wins!`)
   }
 }
 
@@ -72,6 +82,9 @@ function checkforCapture(click){
       if (checkCaptureDirection(click, i, j)) {
         //removePieces(click, i, j)
         console.log('******capture!******\n\n\n')
+        grid[click[0]+i][click[1]+j] = 0;
+        grid[click[0]+i+i][click[1]+j+j] = 0;
+        //showGrid();
       }
     }
   }
@@ -131,7 +144,11 @@ function checkUpRight(click){
   var matchingUpRight = 0;
   var rowDirection = -1;
   var colDirection = 1
-  while(grid[click[0] + rowDirection][click[1] + colDirection] === playerTurn) {
+  while(
+    click[0] + rowDirection >= 0 &&
+    click[1] + colDirection >= 0 &&
+    grid[click[0] + rowDirection][click[1] + colDirection] === playerTurn) 
+    {
     matchingUpRight += 1;
     rowDirection -= 1;
     colDirection += 1
@@ -144,7 +161,11 @@ function checkDownLeft(click){
   var matchingDownLeft = 0;
   var rowDirection = 1;
   var colDirection = -1
-  while(grid[click[0] + rowDirection][click[1] + colDirection] === playerTurn) {
+  while(
+    click[0] + rowDirection >= 0 &&
+    click[1] + colDirection >= 0 &&
+    grid[click[0] + rowDirection][click[1] + colDirection] === playerTurn) 
+    {
     matchingDownLeft += 1;
     rowDirection += 1;
     colDirection -= 1
@@ -162,7 +183,11 @@ function checkUpLeft(click){
   var matchingUpLeft = 0;
   var rowDirection = -1;
   var colDirection = -1
-  while(grid[click[0] + rowDirection][click[1] + colDirection] === playerTurn) {
+  while(
+    click[0] + rowDirection >= 0 &&
+    click[1] + colDirection >= 0 &&
+    grid[click[0] + rowDirection][click[1] + colDirection] === playerTurn) 
+    {
     matchingUpLeft += 1;
     rowDirection -= 1;
     colDirection -= 1
@@ -175,7 +200,11 @@ function checkDownRight(click){
   var matchingDownRight = 0;
   var rowDirection = 1;
   var colDirection = 1
-  while(grid[click[0] + rowDirection][click[1] + colDirection] === playerTurn) {
+  while(
+    click[0] + rowDirection >= 0 &&
+    click[1] + colDirection >= 0 &&
+    grid[click[0] + rowDirection][click[1] + colDirection] === playerTurn) 
+    {
     matchingDownRight += 1;
     rowDirection += 1;
     colDirection += 1
@@ -192,7 +221,10 @@ function checkHorizontal(click) {
 function checkLeft(click){
   var matchingLeft = 0;
   var direction = -1;
-  while(grid[click[0]][click[1] + direction] === playerTurn){
+  while(
+    click[1] + direction >= 0 &&
+    grid[click[0]][click[1] + direction] === playerTurn)
+    {
     matchingLeft += 1;
     direction -= 1;
   }
@@ -203,7 +235,10 @@ function checkLeft(click){
 function checkRight(click){
   var matchingRight = 0;
   var direction = 1;
-  while(grid[click[0]][click[1] + direction] === playerTurn){
+  while(
+    click[1] + direction &&
+    grid[click[0]][click[1] + direction] === playerTurn)
+    {
     matchingRight += 1;
     direction += 1;
   }
@@ -219,7 +254,10 @@ function checkVertical(click) {
 function checkUp(click){
   var matchingUp = 0;
   var direction = -1;
-  while(grid[click[0] + direction][click[1]] === playerTurn){
+  while(
+    click[0] + direction >= 0 &&
+    grid[click[0] + direction][click[1]] === playerTurn)
+    {
     matchingUp += 1;
     direction -= 1;
   }
@@ -230,7 +268,10 @@ function checkUp(click){
 function checkDown(click){
   var matchingDown = 0;
   var direction = 1;
-  while(grid[click[0] + direction][click[1]] === playerTurn){
+  while(
+    click[0] + direction >= 0 &&
+    grid[click[0] + direction][click[1]] === playerTurn)
+    {
     matchingDown += 1;
     direction += 1;
   }
