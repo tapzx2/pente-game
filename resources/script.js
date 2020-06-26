@@ -12,6 +12,7 @@ var record;
 var captures;
 var capturePattern;
 var playingGame;
+var playerColors;
 
 function init () {
   grid = 
@@ -34,6 +35,7 @@ function init () {
   captures = [0, 0];
   capturePattern = [playerTurn, oppositePlayerTurn, oppositePlayerTurn, playerTurn];
   playingGame = true;
+  playerColors = ['rgb(234, 228, 174)', 'rgb(189, 235, 255)'];
 };
 
 //VIEW
@@ -45,8 +47,20 @@ document.querySelector('.play').addEventListener('click', function(){
 })
 
 function showGrid() {
-  console.log(grid);
-} 
+  for (let i = 0; i<10; i++){
+    for (let j = 0; j<10; j++) {
+      if (grid[i][j] === players[0]){
+        document.querySelector(`.click-grid [data-coordinates="${i}-${j}"]`).style.backgroundColor = playerColors[0];
+      } 
+      if (grid[i][j] === players[1]){
+        document.querySelector(`.click-grid [data-coordinates="${i}-${j}"]`).style.backgroundColor = playerColors[1];
+      }
+      if (grid[i][j] === 0){
+        document.querySelector(`.click-grid [data-coordinates="${i}-${j}"]`).style.backgroundColor = '';
+      }
+    }
+  }
+}
 
 function showPlayerTurn(){
   console.log(playerTurn);
@@ -80,12 +94,12 @@ function onClick(click){
     //console.log(capturePattern);
     makeRecord(click)
     updateBoard(click);
-    //showGrid();
+    showGrid();
     checkfor5win(click);
     checkforCapture(click);
     checkforCaptureWin();
     //add check for capture win
-    //showGrid();
+    showGrid();
     updatePlayerTurn();
   }
 }
