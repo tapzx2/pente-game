@@ -31,7 +31,7 @@ function init () {
   oppositePlayerTurn = players[1];
   captures = [];
   record = [];
-  capturePattern = [playerTurn, oppositePlayerTurn, oppositePlayerTurn, oppositePlayerTurn];
+  capturePattern = [playerTurn, oppositePlayerTurn, oppositePlayerTurn, playerTurn];
 
 };
 
@@ -49,12 +49,13 @@ function showPlayerTurn(){
 
 function onClick(click){
   if(grid[click[0]][click[1]] === 0){
+    console.log('turn: ' + (record.length + 1));
+    //console.log(capturePattern);
     makeRecord(click)
     updateBoard(click);
     //showGrid();
     checkfor5win(click);
     checkforCapture(click)
-    //add check for capture
     //add check for capture win
     //showGrid();
     updatePlayerTurn();
@@ -63,7 +64,8 @@ function onClick(click){
 
 // check for capture
 function checkforCapture(click){
-  console.log('checking for capture...');
+  //console.log('checking for capture...');
+  //console.log('capture pattern: ' + capturePattern);
   for (let i = -1; i<2; i++){
     for (let j = -1; j<2; j++){
       //console.log(`in row direction: ${i} and col direction: ${j}`)
@@ -78,13 +80,16 @@ function checkforCapture(click){
 ////check Capture Direction
 function checkCaptureDirection(click, rowVec, colVec){
   for (let i = 0; i<capturePattern.length; i++){
-    //console.log(`click[0]: ${click[0]}, click[1]: ${click[0]}`);
+    //console.log(`click[0]: ${click[0]}, click[1]: ${click[1]}`);
     //console.log('rowVec * i: ' + (rowVec * i))
     //console.log('colVec * i: ' + (colVec * i))
     //console.log('[click[0] + (rowVec * i)][click[1] + (colVec * i)]: ' + [click[0] + (rowVec * i)] + ',' + [click[1] + (colVec * i)]);
+    //console.log(`grid value at above loc: ${grid[click[0] + (rowVec * i)][click[1] + (colVec * i)]}`)
+    //console.log(`capture pattern to match: ${capturePattern[i]}\n`)
     if (
       click[0] + (rowVec * i) < 0 ||
-      click[1] + (colVec * i) < 0
+      click[1] + (colVec * i) < 0 ||
+      (rowVec === 0 && colVec === 0)
     ) {
       //console.log('does not exist on grid, returning false, ending this direction\n')
       return false
@@ -236,8 +241,8 @@ function checkDown(click){
 
 function updatePlayerTurn(){
   playerTurn === players[0] ? playerTurn = players[1] : playerTurn = players[0];
-  oppositePlayerTurn = players[1];
-  capturePattern = [playerTurn, oppositePlayerTurn, oppositePlayerTurn, oppositePlayerTurn];
+  oppositePlayerTurn === players[1] ? oppositePlayerTurn = players[0] : oppositePlayerTurn = players[1];
+  capturePattern = [playerTurn, oppositePlayerTurn, oppositePlayerTurn, playerTurn];
 }
 
 function updateBoard(click){
@@ -253,6 +258,57 @@ function makeRecord(click) {
 //make capture test vertical, horizontal, both diagonals
 
 //vertical capture test
+
+var verticalCapture = [
+  [2,2], [1,2],
+  [3,2], [4,2]
+];
+
+var horizontalCapture = [
+  [0,1], [0,3],
+  [0,2], [0,0]
+];
+
+var uldrCapture = [
+  [0,2], [1,1],
+  [0,0], [2,2],
+  [3,3]
+];
+
+var dlurCapture = [
+  [0,0], [2,1],
+  [3,0], [1,2],
+  [0,3]
+];
+
+var doubleCapture = [
+  [3,1], [3,0],
+  [1,3], [0,3],
+  [3,2], [1,1],
+  [2,3], [3,3]
+];
+
+function captureTest(clickArray) {
+  init(); // new game
+  for (let i = 0; i<clickArray.length;i++){
+    //console.log('clicking: ' + clickArray[i]);
+    onClick(clickArray[i])
+  }
+}
+
+console.log('vertical capture');
+captureTest(verticalCapture);
+console.log('horizontal capture test');
+captureTest(horizontalCapture);
+console.log('uldr capture test');
+captureTest(uldrCapture);
+console.log('dlur capture test');
+captureTest(dlurCapture);
+console.log('double capture test');
+captureTest(doubleCapture);
+
+/*
+//vertical capture test
 init();
 var gameClicks = [
   [2,2], [1,2],
@@ -263,12 +319,7 @@ for (let i = 0; i<gameClicks.length;i++){
   console.log('clicking: ' + gameClicks[i]);
   onClick(gameClicks[i])
 }
-/*
-
-
-  [2,2], [1,2],
-  [3,2], [4,2]
-
+*/
 
 //diagonal win game test upRight downLeft
 init();
