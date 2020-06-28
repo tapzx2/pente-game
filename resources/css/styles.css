@@ -1,0 +1,293 @@
+*{
+  padding:0;
+  margin:0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size:14px;
+  font-weight:300;
+}
+
+/* ----------------------- */
+/* REUSEABLE COMPONTENTS */
+/* ----------------------- */
+
+/* links */
+a {
+  text-decoration:none;
+  font-family: 'Sacramento', cursive;
+  font-size:150%;
+}
+
+.a-small {
+  font-size:100%;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* headers and text */
+
+h2 {
+  font-size: 800%;
+  font-weight:300;
+  text-transform: uppercase;
+  color: #5c607c;
+}
+
+p {
+  display:block;
+  color:#5c607c;
+  font-size:200%;
+  font-weight:300;
+  word-spacing: 2px;
+  letter-spacing:1px;
+}
+
+/* centers visible content */
+
+body, html {
+  height: 100%;
+  display: grid;
+}
+
+.visible-container {
+  margin: auto;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content: center;
+  background-color: blue;
+}
+
+/* info screen size */
+
+.info-screen{
+  width: 600px;
+  height: 350px;
+  border:1px solid #6f7496;
+  background-color:#caaf95;
+}
+
+/* small menu */
+
+.small-menu{
+  position: relative;
+  top:-102px;
+  display:none; /*set to flex when ready to show it */
+  justify-content:flex-end;
+  margin-bottom:-0px;
+}
+
+.divider{
+  border-left: 1px solid black;
+  height:12px;
+  position:relative;
+  top:2px;
+}
+
+.small-amp{
+  font-size: 80%;
+}
+
+/* bottom menu */
+
+.menu-selector{
+  display:flex;
+  justify-content:space-around;
+  padding:0 0 10px 0;
+  margin-top:40px;
+}
+
+.forward-text{
+  color:rgb(234, 228, 174);
+}
+
+.back-text{
+  color: #d2f1ff;
+}
+
+
+/* ----------------------- */
+/* START SCREEN */
+/* ----------------------- */
+
+a.bw{
+  padding-left:7px;
+  color:black;
+}
+
+a.color{
+  padding-right:7px;
+  /* standard gradient background */
+  background: linear-gradient(0.25turn, #6f7496, #8b676b);
+
+  /* clip hackery */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ----------------------- */
+/* RULES SCREEN */
+/* ----------------------- */
+
+.or{
+  font-size:180%;
+}
+
+/* ----------------------- */
+/* CAPTURE SCREEN */
+/* ----------------------- */
+
+.capture-container{
+  display:flex;
+  flex-direction:row;
+  justify-content:center;
+}
+
+div.btn {
+  height:40px;
+  width:40px;
+  border-radius:50%;
+  margin:4px;
+}
+
+div.first, div.fourth{
+  background-color:rgb(234, 228, 174);
+}
+
+div.second, div.third{
+  background-color: #d2f1ff;
+}
+
+.place {
+  animation-duration: 6s;
+  animation-name: fadein;
+  animation-iteration-count: infinite;
+}
+
+@keyframes fadein{
+  0%, 10% {
+    opacity:0;
+  }
+  20% {
+    opacity:1;
+  }
+}
+
+.take{
+  animation-duration: 6s;
+  animation-name: fadeout;
+  animation-iteration-count: infinite;
+}
+
+@keyframes fadeout{
+  30% {
+    opacity:1;
+  }
+  40%, 100% {
+    opacity:0;
+  }
+}
+
+
+/* ----------------------- */
+/* GAME BOARD */
+/* ----------------------- */
+
+
+div.game-frame{
+  position: relative;
+  text-align: center;
+  background:#caaf95;
+  height:630px;
+  width:630px;
+  display:flex;
+}
+
+.grid-container.click-grid {
+  position: absolute;
+  top: 65px;
+  left: 65px;
+  display: grid;
+  margin: 0 auto;
+  grid-template-columns: repeat(10, 50px);
+  grid-template-rows: repeat(10, 50px);
+}
+
+.grid-container.click-grid .grid-item {
+  /*color:rgba(0, 0, 0, 0);*/
+  background-color: rgba(0, 0, 0, 0);
+  margin: 7px;
+  border-radius: 50%;
+  z-index: 9;
+}
+
+.grid-container.display-grid{
+  position: absolute;
+  top: 90px;
+  left: 90px;
+  display: grid;
+  margin: 0 auto;
+  grid-template-columns: repeat(9, 50px);
+  grid-template-rows: repeat(9, 50px);
+}
+
+.grid-container.display-grid .grid-item{
+  color: rgba(0, 0, 0, 0);
+  border: .5px solid rgba(0, 0, 0, .1);
+  background-color:rgba(0, 0, 0, 0);
+}
+
+.click-grid [data-coordinates="0-0"]{
+  background-color: orange;
+}
+
+.btn {
+  text-align: center;
+  color: rgb(139, 103, 107);
+  background-color: rgb(202, 175, 149);
+  font-size: 24px;
+  width:200px;
+  border-radius: 10px;
+  margin: 0 auto;
+}
+
+/* menu selector */
+.game-frame .menu-selector{
+  height: 50px;
+  width:630px;
+  position: absolute;
+  bottom:0%;
+}
+
+/* message box */
+.message-box{
+  height: 50px;
+  width:630px;
+  position: absolute;
+  top:20px;
+}
+
+.message-box .btn{
+  display:inline-block;
+}
+
+.message-box p{
+  margin-left:10px;
+  display: inline-block;
+  vertical-align: 46%;
+}
+
+/* ----------------------- */
+/* HIDE ALL BUT START */
+/* ----------------------- */
+.rules-screen{
+  display:none;
+}
+.game-screen{
+  display:none;
+}
+.capture-screen{
+  display: none;
+}
